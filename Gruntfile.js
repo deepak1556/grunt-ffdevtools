@@ -27,11 +27,16 @@ module.exports = function(grunt) {
 
   grunt.loadTasks('tasks');
 
+  grunt.registerTask('build', [
+    'jst',
+    'concat'
+  ]);  
+
   grunt.registerTask('build_xpi', [
     'mozilla-addon-sdk',
     'mozilla-cfx-xpi'
   ]);
 
-  grunt.registerTask('default', ['build_xpi']);
+  grunt.registerTask('default', ['build', 'build_xpi']);
 
 };

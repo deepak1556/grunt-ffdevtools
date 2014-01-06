@@ -1,5 +1,11 @@
 * {
-  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+html,
+body,
+#panel {
+  height: 50%;
+  width: 100%;
 }
 body {
   margin: 0;
@@ -24,6 +30,116 @@ label {
   font-weight: bold;
   text-shadow: rgba(255, 255, 255, 0.75) 0 1px 0;
 }
+#backgroundTasks,
+#killTask {
+  display: none;
+}
+#backgroundTasks.show,
+#updateWarning.show {
+  display: block;
+}
+#backgroundTasks h2 {
+  color: green;
+}
+#projects {
+  background: -webkit-gradient(linear, left top, left bottom, from(#ececec), to(#d9d9d9));
+  border-bottom: 1px solid #a3a3a3;
+}
+#tools {
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row nowrap;
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: nowrap;
+  -webkit-justify-content: center;
+  -webkit-align-content: center;
+  -webkit-align-items: stretch;
+}
+#tasks {
+  height: 100%;
+  width: 25%;
+  min-width: 150px;
+  background-color: #d6dde5;
+  border-right: 1px solid #a4a4a4;
+  -webkit-flex: 1 1 auto;
+}
+#tasks button {
+  display: block;
+  font-weight: bold;
+  padding: 5px;
+  padding-left: 20px;
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+#tasks button:hover {
+  background: rgba(56, 121, 217, 0.1);
+  color: #5c6e81;
+}
+#tasks li {
+  position: relative;
+}
+#tasks li .b {
+  text-align: center;
+  display: none;
+  position: absolute;
+  background: rgba(92, 110, 129, 0.1);
+  right: 15px;
+  padding: 2px 4px;
+  top: 3px;
+  font-size: 10px;
+  width: auto;
+  border-radius: 15px;
+  border: 1px solid rgba(92, 110, 129, 0.1);
+  height: auto;
+  font-family: Arial, monospace;
+  color: white;
+}
+#tasks li .b:hover {
+  color: white;
+}
+#tasks li .b.b-kill {
+  opacity: 0.7;
+  background: rgba(92, 110, 129, 0.9);
+}
+#tasks li .b.b-second {
+  right: 40px;
+}
+#tasks li .b.b.b-bg {
+  background: green;
+}
+#tasks li .b.b-flag {
+  opacity: 0.2;
+  display: none;
+}
+#tasks li .b.b-flag:hover {
+  opacity: 0.6;
+}
+#tasks li .b.b-flag.b-on {
+  opacity: 1;
+  display: block;
+}
+#tasks li .b.b-verbose:hover {
+  background: orange;
+}
+#tasks li .b.b-force:hover {
+  background: #ff3d00;
+}
+#tasks li .b.b-verbose.b-on {
+  background: orange;
+}
+#tasks li .b.b-force.b-on {
+  background: #ff3d00;
+}
+#tasks li:hover .b.b-flag {
+  display: block;
+}
+.running #tasks li:hover .b.b-flag {
+  display: none;
+}
 pre {
   font-size: 11px;
   margin: 1px 0 1px 0;
@@ -37,4 +153,147 @@ button {
   border: none;
   cursor: pointer;
   text-align: left;
+}
+#projects {
+  min-height: 25px;
+}
+#projects h2 {
+  display: inline;
+}
+#projects button {
+  border: 1px solid rgba(163, 163, 163, 0);
+}
+#projects button.active {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #a3a3a3;
+  color: #2e2e2e;
+}
+#projects button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #a3a3a3;
+  color: #2e2e2e;
+}
+#placeOutput {
+  padding: 0 0 40px 10px;
+}
+#placeTasks {
+  margin-bottom: 50px;
+}
+#placeProjects {
+  display: inline;
+}
+#tasks li .b.b-kill:hover {
+  background-color: red;
+  border-color: red;
+  opacity: 1;
+}
+#notice p {
+  color: #5c6e81;
+  font-size: 25px;
+  padding: 20px;
+  text-align: center;
+}
+#output,
+#tasks {
+  overflow: auto;
+}
+#output {
+  width: 75%;
+  -webkit-flex: 3 1 auto;
+}
+.offline #panel {
+  display: none;
+}
+#notice small {
+  color: rgba(92, 110, 129, 0.5);
+}
+.offline #notice {
+  display: block;
+}
+.online #notice {
+  display: none;
+}
+#running {
+  display: none;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+.running #tasks .task:hover {
+  cursor: not-allowed;
+}
+.running #tasks .active-task .b {
+  display: block;
+}
+.running #tasks .task {
+  opacity: 0.3;
+}
+.running #tasks .active-task {
+  opacity: 1;
+}
+.running #running {
+  display: block;
+}
+#backgroundTasks li .b {
+  display: block;
+}
+#updateWarning {
+  display: none;
+  position: relative;
+  border: 1px solid #a4a4a4;
+  border-top: none;
+  border-right: none;
+  background: -webkit-linear-gradient(top, #fff8ba 0%, #f1da36 100%);
+  font-size: 10px;
+}
+#updateWarning p {
+  padding: 5px;
+  margin: 0;
+}
+@media all and (max-width: 250px) {
+  #output {
+    display: none;
+  }
+  #tasks {
+    width: 100%;
+  }
+}
+/**
+ * Default theme.
+ * TODO: theme support in options;
+ */
+.theme-timestamp {
+  color: silver;
+}
+.theme-inverse {
+  background-color: black;
+  color: white;
+}
+.theme-white {
+  color: white;
+}
+.theme-grey {
+  color: grey;
+}
+.theme-black {
+  color: grey;
+}
+.theme-blue {
+  color: blue;
+}
+.theme-cyan {
+  color: #00c7ff;
+}
+.theme-green {
+  color: green;
+}
+.theme-magenta {
+  color: magenta;
+}
+.theme-red {
+  color: red;
+}
+.theme-yellow {
+  color: #ffb600;
 }

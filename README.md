@@ -15,5 +15,5 @@ npm install -g grunt-devtools
 
 ```
 npm install
-grunt run_xpi
+grunt //builds xpi
 ```
