@@ -1,0 +1,40 @@
+* {
+  -moz-box-sizing: border-box;
+}
+body {
+  margin: 0;
+  position: fixed;
+  font-family: Lucida Grande, sans-serif;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+h2,
+label {
+  text-transform: uppercase;
+  position: relative;
+  height: 18px;
+  font-size: 11px;
+  padding: 10px;
+  white-space: nowrap;
+  margin-top: 1px;
+  color: #5c6e81;
+  font-weight: bold;
+  text-shadow: rgba(255, 255, 255, 0.75) 0 1px 0;
+}
+pre {
+  font-size: 11px;
+  margin: 1px 0 1px 0;
+  color: #5c6e81;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}

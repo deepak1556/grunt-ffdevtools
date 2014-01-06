@@ -1,0 +1,22 @@
+{
+  "name": "grunt-ffdevtools",
+  "version": "0.0.1",
+  "description": "grunt task runner for firefox devtools",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deepak1556/grunt-ffdevtools"
+  },
+  "author": "robo",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.8",
+    "grunt-mozilla-addon-sdk": "~0.3.1",
+    "glob": "~3.2.7",
+    "matchdep": "~0.3.0"
+  }
+}

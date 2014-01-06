@@ -1,0 +1,8 @@
+{
+    "preferences": [],
+    "name": "grunt-devtools",
+    "version": "0.0.1",
+    "fullName": "Grunt Devtools",
+    "id": "grunt-devtools@mozilla.com",
+    "description": "Grunt Task runner for Firefox DevTools"
+}
