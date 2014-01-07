@@ -14,7 +14,8 @@ var startPort = CONNECTION_PORT,
 
 var projectListTpl = JST['src/templates/project-list.html'],
   panelTpl = JST['src/templates/panel-tpl.html'],
-  taskListTpl = JST['src/templates/task-list.html'];
+  taskListTpl = JST['src/templates/task-list.html'],
+  bgTasksTpl = JST['src/templates/background-task-list.html'];
 
 var $body = $('body'),
   $panel = $('#panel');
@@ -27,7 +28,9 @@ var $projects = $('#placeProjects'),
   $outputWrap = $('#output'),
   $regularTasks = $('#placeTasks'),
   $aliasTasks = $('#placeAliasTasks'),
-  $warning = $('#updateWarning');  
+  $warning = $('#updateWarning'),
+  $bgSection = $('#backgroundTasks'),
+  $bgTasks = $('#placeBackgroundTasks');  
 
 /**
  * Console color styles
@@ -225,8 +228,29 @@ function handleSocketMessage(event) {
   }
 }
 
-function handleSocketClose() {
+function handleSocketClose(e) {
+  var closedPort = parseInt(e.currentTarget.URL.split(':')[2].replace(/\D/g, ''));
 
+  var newProjects = _.reject(projects, function(el) {
+    return el.port === closedPort;
+  });
+
+  if(newProjects && newProjects.length !== projects.length) {
+    if(closedPort === currentProject.port && currentProject.running) {
+      currentProject.running = false;
+      enableActivity();
+    }
+
+    projects = newProjects;
+    updateTaskList();
+    setProject(projects.length - 1);
+  } else {
+    projects = newProjects;
+  }
+
+  if(projects.length === 0) {
+    $body.removeClass('online').addClass('offline');
+  }
 }
 
 /**
@@ -250,6 +274,21 @@ function updateTaskList() {
     $('.task[value="'+ currentProject.currentTask.name +'"]')
       .siblings('.b-kill').data('pid', currentProject.currentTask.pid).end()
       .parent().addClass('active-task');
+  }
+
+  var bgTasks = currentProject.tasks;
+
+  if(currentProject.currentTask) {
+    bgTasks = _.reject(currentProject.tasks, function(task) {
+      return task.pid === currentProject.currentTask.pid;
+    });
+  }
+
+  if(bgTasks.length > 0) {
+    $bgSection.addClass('show');
+    $bgTasks.html(bgTasksTpl({tasks : bgTasks}));
+  } else {
+    $bgSection.removeClass('show');
   }
 
   if(currentProject.running) {
@@ -288,6 +327,48 @@ $tasks.on('click', '.task', function() {
 
   currentProject.socket.send(cmd);
   disableActivity();
+});
+
+$tasks.on('click', '.bgTask', function() {
+  var pid = $(this).siblings('.b-kill').data(pid);
+  currentProject.currentTask = _.find(currentProject.tasks, function(task) {
+    return task.pid === pid;
+  });
+
+  if(currentProject.currentTask) {
+    $output.html(currentProject.currentTask.output);
+  }
+
+  currentProject.currentTask = null;
+  updateTaskList();
+  currentProject.running = false;
+  enableActivity();
+});
+
+$projects.on('click', 'button', function() {
+  var idx = $(this).val();
+  setProject(idx);
+  currentProject.running ? disableActivity() : enableActivity();
+});
+
+$tasks.on('click', '.b-kill', function() {
+  var btn = $(this),
+    taskInfo = currentProject.currentTask;
+
+  if(btn.data('pid')) {
+    taskInfo = {name : btn.siblings('.task').val(), pid : btn.data('pid')};
+
+    currentProject.tasks = _.reject(currentProject.tasks, function(task) {
+      return task.pid === btn.data('pid');
+    });
+
+    updateTaskList();
+  }  
+
+  currentProject.socket.send(JSON.stringify({
+    action : 'KillTask',
+    task : taskInfo
+  }));
 });
 
 function disableActivity() {

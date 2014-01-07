@@ -10,6 +10,7 @@ body,
 body {
   margin: 0;
   position: fixed;
+  background: #fff;
   font-family: Lucida Grande, sans-serif;
 }
 ul {
