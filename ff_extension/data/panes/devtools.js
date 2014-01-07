@@ -173,11 +173,11 @@ function handleSocketMessage(event) {
     if(data.project) {
       projects.push({
         name : data.project,
-        port : data.port,
+        port : parseInt(data.port),
 
         socket : this,
         taskListAlias : data.alias,
-        taskListGeneric : data.task,
+        taskListGeneric : data.tasks,
         tasks : [],
         running : false
       });
@@ -185,11 +185,12 @@ function handleSocketMessage(event) {
       updateProjectList();
 
       setProject(projects.length - 1);
-    } else if(data.action == 'start') {
+
+    } else if(data.action === 'start') {
       currentProject.currentTask = {name : data.name, pid : data.pid, output : []};
       currentProject.tasks.push(currentProject.currentTask);
       updateTaskList();
-    } else if(data.action == 'done') {
+    } else if(data.action === 'done') {
       currentProject.tasks = _.reject(currentProject.tasks, function (task) {
         return task.pid === data.pid;
       });
@@ -198,7 +199,7 @@ function handleSocketMessage(event) {
       enableActivity();
     }
   }  else {
-    if(data && data.indexOf('Running Task:') == 0) {
+    if(data && data.indexOf('Running Task:') === 0) {
       $output.html('');
     } else if(data.length > 1) {
       if(currentProject.tasks.length > 0) {
@@ -211,7 +212,7 @@ function handleSocketMessage(event) {
           output = '<pre><span class="theme-timestamp">' + timestamp + '</span> - ' + colorize(_.escape(msg[1])) + '</pre>';
         }  
 
-        var pidTask = _.find(currentProject.tasks, function(task) {
+        var pidTask = _.find(currentProject.tasks, function (task) {
           return task.pid === parseInt(pid);
         }); 
 
@@ -231,7 +232,7 @@ function handleSocketMessage(event) {
 function handleSocketClose(e) {
   var closedPort = parseInt(e.currentTarget.URL.split(':')[2].replace(/\D/g, ''));
 
-  var newProjects = _.reject(projects, function(el) {
+  var newProjects = _.reject(projects, function (el) {
     return el.port === closedPort;
   });
 
@@ -279,7 +280,7 @@ function updateTaskList() {
   var bgTasks = currentProject.tasks;
 
   if(currentProject.currentTask) {
-    bgTasks = _.reject(currentProject.tasks, function(task) {
+    bgTasks = _.reject(currentProject.tasks, function (task) {
       return task.pid === currentProject.currentTask.pid;
     });
   }
@@ -330,7 +331,7 @@ $tasks.on('click', '.task', function() {
 });
 
 $tasks.on('click', '.bgTask', function() {
-  var pid = $(this).siblings('.b-kill').data(pid);
+  var pid = $(this).siblings('.b-kill').data('pid');
   currentProject.currentTask = _.find(currentProject.tasks, function(task) {
     return task.pid === pid;
   });
@@ -351,6 +352,22 @@ $projects.on('click', 'button', function() {
   currentProject.running ? disableActivity() : enableActivity();
 });
 
+$tasks.on('click', '.b-bg', function () {
+  if (currentProject.currentTask) {
+    currentProject.currentTask = null;
+    $output.html('');
+    updateTaskList();
+    currentProject.running = false;
+    enableActivity();
+  }
+});
+
+// set flags
+$tasks.on('click', '.b-flag', function () {
+  var bData = $(this);
+  bData.hasClass('b-on') ? bData.removeClass('b-on') : bData.addClass('b-on');
+});
+
 $tasks.on('click', '.b-kill', function() {
   var btn = $(this),
     taskInfo = currentProject.currentTask;
@@ -358,7 +375,7 @@ $tasks.on('click', '.b-kill', function() {
   if(btn.data('pid')) {
     taskInfo = {name : btn.siblings('.task').val(), pid : btn.data('pid')};
 
-    currentProject.tasks = _.reject(currentProject.tasks, function(task) {
+    currentProject.tasks = _.reject(currentProject.tasks, function (task) {
       return task.pid === btn.data('pid');
     });
 
@@ -366,7 +383,7 @@ $tasks.on('click', '.b-kill', function() {
   }  
 
   currentProject.socket.send(JSON.stringify({
-    action : 'KillTask',
+    action : 'killTask',
     task : taskInfo
   }));
 });

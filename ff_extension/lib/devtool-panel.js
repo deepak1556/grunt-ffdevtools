@@ -48,15 +48,14 @@ exports.devtoolTabDefinition = {
 let GruntDevtools = {
   initialize: function (iframeWindow, toolbox) {
     console.debug("initialize");
-    this.workers = {};
     this.iframeWindow = iframeWindow.document.querySelector("iframe");
     this.toolbox = toolbox;
 
     this.iframeWindow.setAttribute("src", self.data.url("panes/index.html"));
   },
     
-    destroy : function() {
-        log('destroyin...');
-        this.iframeWindow.setAttribute('src', 'about:blank');
-    }   
+  destroy : function() {
+    log('destroyin...');
+    this.iframeWindow.setAttribute('src', 'about:blank');
+  }   
 };
