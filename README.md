@@ -1,7 +1,7 @@
 grunt-ffdevtools
 ================
 
-Grunt task runner for firefox devtools
+Grunt task runner for firefox devtools based on the chrome extension by [@vladikoff](https://github.com/vladikoff/grunt-devtools)
 
 **grunt-devtools not runnning** : 
 ![grunt-inactive](https://raw.github.com/deepak1556/grunt-ffdevtools/screenshots/screenshots/Grunt-devtools-inactive.png)
