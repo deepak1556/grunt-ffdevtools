@@ -24,6 +24,10 @@ npm install
 grunt       //builds xpi
 ```
 
+Or
+
+Download the xpi from [here](https://github.com/deepak1556/grunt-ffdevtools/releases)
+
 ## Installing the Extension
 
 1. Open Firefox -> Addons -> install extension from file
